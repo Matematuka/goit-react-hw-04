@@ -1,19 +1,27 @@
-import { useEffect } from "react";
 import ImageCard from "../ImageCard/ImageCard";
+import { forwardRef } from "react";
+import css from "./ImageGallery.module.css";
 
-const ImageGallery = ({ photos }) => {
-  useEffect(() => {});
+const ImageGallery = forwardRef(function ImageGallery(
+  { photos, openModal },
+  ref
+) {
   return (
-    <ul>
+    <ul className={css.gallery} ref={ref}>
       {photos.map(({ id, alt_description, urls }) => {
         return (
-          <li key={id}>
-            <ImageCard alt_description={alt_description} small={urls.small} />
+          <li className={css.galleryItem} key={id}>
+            <ImageCard
+              id={id}
+              alt_description={alt_description}
+              small={urls.small}
+              openModal={openModal}
+            />
           </li>
         );
       })}
     </ul>
   );
-};
+});
 
 export default ImageGallery;
