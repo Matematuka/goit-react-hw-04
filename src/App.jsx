@@ -1,46 +1,52 @@
 import { useState, useEffect } from "react";
 import "./App.css";
-import axios from "axios";
 import SearchBar from "./components/SearchBar/SearchBar";
 import Loader from "./components/Loader/Loader";
-// import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
-// import ImageGallery from "./components/ImageGallery/ImageGallery";
+import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
+import ImageGallery from "./components/ImageGallery/ImageGallery";
 // import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
 // import ImageModal from "./components/ImageModal/ImageModal";
 
-// import { fetchImagesSearch } from "./services/api";
+import { fetchImagesSearch } from "./services/api";
 
 function App() {
   const [photos, setPhotos] = useState([]);
   const [query, setQuery] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  // const [isError, setIsError] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   const onSearchQuery = (searchTerm) => {
-    setQuery(searchTerm);
+    if (query !== searchTerm) {
+      setPhotos([]);
+      setQuery(searchTerm);
+    }
   };
-
   useEffect(() => {
     async function fetchImages() {
-      setIsLoading(true);
-      const response = await axios.get(
-        "https://api.unsplash.com/photos/?client_id=1bnOnn5qY0HAwAJR9CN6sX_5D3JT3cSAFzB3seTyYiU"
-      );
-      console.log(response);
-      setPhotos(response.data);
-      setIsLoading(false);
+      try {
+        setIsError(false);
+        setIsLoading(true);
+        const response = await fetchImagesSearch(query);
+        setPhotos(response.results);
+      } catch {
+        setIsError(true);
+      } finally {
+        setIsLoading(false);
+      }
     }
-    fetchImages();
-  }, []);
+    if (query !== "") {
+      fetchImages();
+    }
+  }, [query]);
 
   return (
     <div>
       <SearchBar onSubmit={onSearchQuery} />
       {isLoading && <Loader />}
-      {/* {isError && <ErrorMessage />} */}
-      {/* <ImageGallery />
-      <LoadMoreBtn />
-      <ImageModal /> */}
+      {isError && <ErrorMessage />}
+      {<ImageGallery photos={photos} />}
+      {/* <LoadMoreBtn />
+      <ImageModal />  */}
     </div>
   );
 }

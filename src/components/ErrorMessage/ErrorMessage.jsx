@@ -1,5 +1,5 @@
 const ErrorMessage = () => {
-  return <div>ErrorMessage</div>;
+  return <p>Ooops.... Something went wrong</p>;
 };
 
 export default ErrorMessage;
