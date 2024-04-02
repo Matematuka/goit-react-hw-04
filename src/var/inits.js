@@ -1,8 +1,8 @@
-const initModImg = {
+export const initModImg = {
   alt_description: "alt",
   urls: {
     regular: "regular",
   },
 };
 
-export default initModImg;
+export const pagination = 15;
