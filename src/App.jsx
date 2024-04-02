@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import "./App.css";
 
+import toast from "react-hot-toast";
 import SearchBar from "./components/SearchBar/SearchBar";
 import Loader from "./components/Loader/Loader";
 import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
@@ -8,8 +9,18 @@ import ImageGallery from "./components/ImageGallery/ImageGallery";
 import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
 import ImageModal from "./components/ImageModal/ImageModal";
 import { initModImg, pagination } from "./var/inits.js";
-
 import { fetchImagesSearch } from "./services/api";
+
+const message = () =>
+  toast("There are no images. Please enter another request", {
+    duration: 4000,
+    position: "top-left",
+    style: {
+      borderRadius: "10px",
+      background: "#387ce1",
+      color: "#fff",
+    },
+  });
 
 function App() {
   const [photos, setPhotos] = useState([]);
@@ -55,7 +66,6 @@ function App() {
   useEffect(() => {
     async function fetchImages() {
       try {
-        setIsError(false);
         setIsLoading(true);
         const response = await fetchImagesSearch(
           query,
@@ -64,7 +74,10 @@ function App() {
         );
         setMaxPage(response.total_pages);
         setPhotos((photos) => [...photos, ...response.results]);
-      } catch {
+        if (response.total_pages === 0) {
+          message();
+        }
+      } catch (error) {
         setIsError(true);
       } finally {
         setIsLoading(false);
