@@ -1,7 +1,9 @@
+import css from "./ImageCard.module.css"
+
 const ImageCard = ({ alt_description, small, id, openModal }) => {
   return (
     <div>
-      <img
+      <img className={css.img}
         id={id}
         src={small}
         alt={alt_description}

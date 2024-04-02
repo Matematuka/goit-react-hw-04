@@ -1,6 +1,7 @@
 import { Formik, Field, Form } from "formik";
 import toast, { Toaster } from "react-hot-toast";
 import * as Yup from "yup";
+import css from "./SearchBar.module.css";
 
 const notify = () =>
   toast("This field cannot be empty. Please enter a search query", {
@@ -34,6 +35,7 @@ const SearchBar = ({ onSubmit }) => {
         <Form>
           <label>
             <Field
+              className={css.formSearch}
               type="text"
               name="searchTerm"
               autoComplete="off"
@@ -41,10 +43,12 @@ const SearchBar = ({ onSubmit }) => {
               placeholder="Search images and photos"
             />
           </label>
-          <button type="submit">Search</button>
+          <button className={css.formBtn} type="submit">
+            Search
+          </button>
+          <Toaster />
         </Form>
       </Formik>
-      <Toaster />
     </header>
   );
 };
